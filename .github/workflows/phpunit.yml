@@ -1,0 +1,26 @@
+name: Validacao de Testes PHPUnit
+
+# Quando esse robô deve acordar?
+on:
+  pull_request:
+    branches: [ "main" ]
+
+# O que ele deve fazer?
+jobs:
+  testar-codigo:
+    runs-on: ubuntu-latest # Ele vai rodar em um ambiente virtual no servidor!
+
+    steps:
+    - name: 1. Pegando os arquivos do projeto
+      uses: actions/checkout@v3
+
+    - name: 2. Instalando o PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1' 
+
+    - name: 3. Instalando o Composer e dependências
+      run: composer install
+
+    - name: 4. A Hora da Verdade - Rodando o PHPUnit
+      run: ./vendor/bin/phpunit tests/ExemploTest.php
