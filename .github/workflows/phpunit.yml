@@ -17,10 +17,18 @@ jobs:
     - name: 2. Instalando o PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1' 
+        php-version: '8.1'
 
     - name: 3. Instalando o Composer e dependências
       run: composer install
 
-    - name: 4. A Hora da Verdade - Rodando o PHPUnit
-      run: ./vendor/bin/phpunit tests/ExemploTest.php
+    - name: 4. A Hora da Verdade - Rodando o PHPUnit e gerando relatório
+      # O parâmetro --testdox-html diz pro PHPUnit cuspir o resultado em um arquivo visual
+      run: ./vendor/bin/phpunit tests/ExemploTest.php --testdox-html relatorio-phpunit.html
+
+    - name: 5. Guardando o relatório como Artefato
+      uses: actions/upload-artifact@v4
+      if: always() # Super importante: salva o arquivo mesmo se o teste der erro
+      with:
+        name: relatorio-de-testes # O nome da pastinha que vai aparecer no GitHub
+        path: relatorio-phpunit.html # O nome exato do arquivo que o PHPUnit cuspiu
